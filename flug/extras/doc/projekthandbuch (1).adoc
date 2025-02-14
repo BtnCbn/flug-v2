@@ -1,0 +1,76 @@
+= Projekthandbuch
+Botan Coban
+:doctype: book
+:toc: left
+:sectanchors:
+:sectlinks:
+:sectnums:
+:pagenums:
+:source-highlighter: rouge
+:icons: font
+
+// https://github.com/asciidoctor/asciidoctorj
+// https://github.com/asciidoctor/asciidoctor-diagram
+// http://de.plantuml.com/classes.html
+// http://de.plantuml.com/component.html
+// https://github.com/odrotbohm/asciidoctor-plantuml
+
+
+== Der Microservice Flug
+
+=== Der Microservice im Überblick
+
+
+.Komponenten des Microservice "Flug"
+[plantuml,komponenten,svg]
+----
+include::./komponenten.plantuml[]
+----
+
+=== Die REST-Schnittstelle
+
+
+."FlugGetController" für Lesezugriffe an der REST-Schnittstelle
+[plantuml,FlugGetController,svg]
+----
+include::./FlugGetController.plantuml[]
+----
+
+.Die Klasse "FlugModel" für den Datenaustausch bei GET
+[plantuml,FlugModel,svg]
+----
+include::./FlugModel.plantuml[]
+----
+
+."FlugWriteController" für Schreibzugriffe an der REST-Schnittstelle
+[plantuml,FlugWriteController,svg]
+----
+include::./FlugWriteController.plantuml[]
+----
+
+=== Die Geschäftslogik
+
+
+.Die Service-Klasse "FlugReadService" für die Geschäftslogik
+[plantuml,FlugReadService,svg]
+----
+include::./FlugReadService.plantuml[]
+----
+
+
+.Die Service-Klasse "FlugWriteService" für die Geschäftslogik
+[plantuml,FlugWriteService,svg]
+----
+include::./FlugWriteService.plantuml[]
+----
+
+=== Die Entity-Klassen
+
+
+.Die Entity-Klasse "Flug" für Flugdaten
+[plantuml,Flug,svg]
+----
+include::./Flug.plantuml[]
+----
+
+

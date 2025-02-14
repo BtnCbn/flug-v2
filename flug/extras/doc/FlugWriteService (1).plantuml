@@ -1,0 +1,39 @@
+@startuml FlugWriteService
+
+skinparam classAttributeIconSize 0
+
+package org.springframework.stereotype {
+    interface Service
+}
+
+package java.util {
+    class UUID
+}
+
+package com.acme.flug {
+    package entity {
+        class Flug << entity >>
+    }
+
+    package repository {
+        class FlugRepository << control >> << @Repository >>
+    }
+
+    package service #DDDDDD {
+        class FlugWriteService << control >> << @Service >> {
+            + create(flug: Flug): Flug
+            + update(flug: Flug, id: UUID)
+        }
+
+        FlugWriteService o--> "1" FlugRepository : repo
+        FlugWriteService .right.> Flug
+        FlugWriteService .up.> Service
+        FlugWriteService .up.> UUID
+    }
+}
+
+hide empty members
+
+footer (c) Botan Coban
+
+@enduml

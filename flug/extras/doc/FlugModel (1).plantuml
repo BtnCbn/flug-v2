@@ -1,0 +1,59 @@
+@startuml Flug
+
+skinparam classAttributeIconSize 0
+' skinparam monochrome true
+
+package java {
+    package util {
+        interface List<T>
+        class URL
+    }
+
+    package time {
+        class LocalDate
+
+        LocalDate .right[hidden].> List
+    }
+}
+
+package org.springframework.hateoas {
+    class RepresentationModel<T>
+
+    URL .right[hidden].> RepresentationModel
+}
+
+package com.acme.flug {
+    package entity {
+        class Flug
+        class Flugzeug
+        class Buchung
+        enum StatusType
+    }
+
+    package rest #DDDDDD {
+        class FlugModel << entity >> {
+           startFlughafen : String
+           zielFlughafen : String
+           status : StatusType
+           buchungen:  List<Buchung>
+           flugzeug: Flugzeug
+
+            FlugModel(Flug: Flug)
+        }
+
+        FlugModel *--> "1..1" Flugzeug : flugzeuge
+        FlugModel *--> "1..n" Buchung : buchungen
+        Flug .down.> StatusType
+
+        FlugModel ..> Flug
+
+        FlugModel .up.> LocalDate
+        FlugModel .up.> List
+    }
+}
+
+hide empty members
+
+footer (c) Botan Coban
+
+@enduml

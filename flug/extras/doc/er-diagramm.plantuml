@@ -1,0 +1,39 @@
+@startuml ER Diagramm
+
+hide circle
+
+
+skinparam linetype ortho
+
+entity "Flugzeug" {
+  * id : UUID <<generated>>
+  --
+  * model : text
+}
+
+entity "Flug" {
+  * id : UUID <<generated>>
+  --
+  * version: integer
+  * startFlughafen : text
+  * zielFlughafen : text
+  * **flugzeug_id**: UUID <<FK>>
+    status: text
+  * erzeugt: timestamp
+  * aktualisiert: timestamp
+}
+
+entity "Buchung" {
+  * id : UUID <<generated>>
+  --
+  * zeitpunkt : date
+  * nachname : text
+  * **hotel_id**: UUID <<FK>>
+}
+
+Flug ||.left.|| Flugzeug
+Flug ||.right.o{ Buchung
+
+footer (c) Jürgen Zimmermann
+
+@enduml

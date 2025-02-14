@@ -1,0 +1,57 @@
+@startuml Flug
+
+skinparam classAttributeIconSize 0
+' skinparam monochrome true
+
+package java {
+    package util {
+        class UUID
+    }
+
+    package time {
+        class LocalDateTime
+    }
+    UUID .[hidden].> LocalDateTime
+}
+
+package com.acme.Flug.entity #DDDDDD {
+    class Buchung {
+        nachname: String
+        zeitpunkt: LocalDateTime
+    }
+
+       class Flugzeug {
+       id : UUID
+       model: String
+       }
+
+    enum StatusType {
+        GESTARTET
+        GELANDET
+        READY_FOR_TAKEOFF
+    }
+
+    class Flug << entity >> {
+          id : UUID
+          startFlughafen : String
+          zielFlughafen : String
+          status : StatusType
+    }
+
+    Flug o--> "1" Flugzeug : flugzeuge
+    Flug *--> "1..n" Buchung : buchungen
+    Flug .up.> StatusType
+
+
+    Flug ..> UUID
+    Flug ..> LocalDateTime
+    Buchung ..> LocalDateTime
+    Flugzeug ..> UUID
+
+}
+
+hide empty members
+
+footer (c) Botan Coban
+
+@enduml

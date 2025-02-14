@@ -1,0 +1,27 @@
+@startuml Komponenten
+
+left to right direction
+
+package com.acme.Flug #DDDDDD {
+    package rest <<boundary>> #FFFFFF {
+        [@RestController\nFlugReadController] as FlugReadController
+    }
+
+    package service <<control>> #FFFFFF {
+        [@Service\nFlugReadService] as FlugReadService
+    }
+
+    package entity <<entity>> #FFFFFF {
+        [Flug]
+    }
+}
+
+RESTClient ~~> [FlugReadController]
+
+[FlugReadController] o--> [FlugReadService]
+[FlugReadController] .up.> [Flug]
+[FlugReadService] ..> [Flug]
+
+footer (c) Botan Coban
+
+@enduml

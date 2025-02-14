@@ -1,0 +1,90 @@
+@startuml FlugWriteController
+
+skinparam classAttributeIconSize 0
+
+package org.springframework {
+package stereotype {
+        interface "@Controller" as Controller
+    }
+
+    package web.bind.annotation {
+        interface "@RequestMapping" as RequestMapping
+        interface "@PathVariable" as PathVariable
+        interface "@RequestBody" as RequestBody
+        interface "@ExceptionHandler" as ExceptionHandler
+        interface "@PostMapping" as PostMapping
+        interface "@PutMapping" as PutMapping
+        class MethodArgumentNotValidException
+    }
+
+    package http {
+        class ResponseEntity<T>
+        class ProblemDetail
+
+        package converter {
+            class HttpMessageNotReadableException
+        }
+    }
+    package validation.annotation {
+        interface Validated
+    }
+}
+
+package jakarta{
+    package servlet.http{
+        interface HttpServletRequest
+    }
+    package validation{
+        interface "@Valid" as Valid
+    }
+}
+
+package java.util {
+    class UUID
+
+}
+
+package com.acme.flug {
+    package service {
+        class FlugWriteService << control >> << @Service >>
+    }
+
+    package rest #DDDDDD {
+
+        class FlugDTO <<entity>>
+
+        class FlugWriteController << boundary >> << @Controller >> << @RequestMapping >> <<@Validated>>{
+            + @PostMapping post(@RequestBody FlugDTO: FlugDTO, request: HttpServletRequest): ResponseEntity<Void>
+            + @PutMapping put(@PathVariable id: UUID, @RequestBody FlugDTO: FlugDTO)
+            + @ExceptionHandler onConstraintViolations(ex: MethodArgumentNotValidException, request: HttpServletRequest): ResponseEntity<ProblemDetail>
+            + @ExceptionHandler onHttpMessageNotReadable(ex: HttpMessageNotReadableException, request: HttpServletRequest): ResponseEntity<ProblemDetail>
+        }
+
+        FlugWriteController o-down-> "1" FlugWriteService : service
+        FlugWriteController ..> FlugDTO
+
+        FlugWriteController .up.> ResponseEntity
+        FlugWriteController .up.> ProblemDetail
+        FlugWriteController .up.> HttpMessageNotReadableException
+        FlugWriteController ..> HttpServletRequest
+
+        FlugWriteController .up.> Controller
+        FlugWriteController .up.> RequestMapping
+        FlugWriteController .up.> PathVariable
+        FlugWriteController .up.> RequestBody
+        FlugWriteController .up.> PostMapping
+        FlugWriteController .up.> PutMapping
+        FlugWriteController .up.> ExceptionHandler
+        FlugWriteController .up.> MethodArgumentNotValidException
+        FlugWriteController .up.> Validated
+        FlugWriteController ..> Valid
+
+        FlugWriteController .right.> UUID
+    }
+}
+
+hide empty members
+
+footer (c) Botan Coban
+
+@enduml

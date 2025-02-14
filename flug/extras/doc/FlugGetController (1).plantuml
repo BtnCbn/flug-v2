@@ -1,0 +1,80 @@
+@startuml FlugGetController
+
+skinparam classAttributeIconSize 0
+
+package org.springframework {
+    package web.bind.annotation {
+        interface "@RestController" as RestController
+        interface "@RequestMapping" as RequestMapping
+        interface "@PathVariable" as PathVariable
+        interface "@RequestParam" as RequestParam
+        interface "@ExceptionHandler" as ExceptionHandler
+        interface "@ResponseStatus" as ResponseStatus
+    }
+
+    package http {
+        class ResponseEntity<T>
+    }
+    package hateoas {
+        class CollectionModel<E>
+    }
+    package util {
+        class MultiValueMap<K,V>
+    }
+}
+
+package jakarta.servlet.http {
+    interface HttpServletRequest
+}
+
+package java.util {
+    class UUID
+    UUID .up[hidden].> HttpServletRequest
+}
+
+package com.acme.flug {
+    package service {
+        class FlugReadService << control >> << @Service >>
+        class NotFoundException
+    }
+
+    package rest #DDDDDD {
+        class FlugModel <<entity>>
+
+        class FlugGetController << boundary >> << @RestController >> << @RequestMapping >> {
+            + @GetMapping getById(@PathVariable id: UUID, request: HttpServletRequest): FlugModel
+            + @GetMapping get(@RequestParam MultiValueMap<String, String> suchkriterien, HttpServletRequest request): CollectionModel<FlugModel>
+        }
+
+        class CommonExceptionHandler << @ControllerAdvice >> {
+            + @ExceptionHandler @ResponseStatus onNotFound(ex: NotFoundException)
+        }
+
+        FlugGetController o--> "1" FlugReadService : service
+        FlugGetController ..> FlugModel
+
+        FlugGetController .up.> RestController
+        FlugGetController .up.> RequestMapping
+        FlugGetController .up.> PathVariable
+        FlugGetController .up.> RequestParam
+        FlugGetController .up.> ResponseEntity
+        FlugGetController .up.> MultiValueMap
+        FlugGetController .up.> CollectionModel
+        FlugGetController .right.> HttpServletRequest
+
+        CommonExceptionHandler .up.> ExceptionHandler
+        CommonExceptionHandler .up.> ResponseStatus
+        CommonExceptionHandler ..> NotFoundException
+        CommonExceptionHandler .up[hidden].> FlugModel
+
+        FlugGetController .right.> UUID
+
+        FlugModel ..> FlugReadService
+    }
+}
+
+hide empty members
+
+footer (c) Botan Coban
+
+@enduml
